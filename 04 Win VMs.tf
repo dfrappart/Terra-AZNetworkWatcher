@@ -155,7 +155,7 @@ module "NICs_WINGR1VMs" {
 
 #Datadisk creation
 
-module "DataDisks_LXGR1VMs" {
+module "DataDisks_WINGR1VMs" {
 
     #Module source
 
