@@ -196,25 +196,25 @@ output "Subnet3AddressPrefix" {
 ######################################################
 #Linux VMs Output
 
-output "VMsSubnet1fqdn" {
+output "LXGR1VMsfqdn" {
 
-    value = ["${module.VMsPIPSubnet1.fqdns}"]
+    value = ["${module.LXGR1PIP.fqdns}"]
 }
 
-output "VMsPIPSubnet1Address" {
+output "LXGR1VMsPIPAddress" {
 
-    value = ["${module.VMsPIPSubnet1.IPAddresses}"]
+    value = ["${module.LXGR1PIP.IPAddresses}"]
 }
 
 ######################################################
-#Azure Web LB Output
+#Win VMs Output
 
-output "VMsSubnet2fqdn" {
+output "WINGR1VMsfqdn" {
 
-    value = ["${module.VMsPIPSubnet2.fqdns}"]
+    value = ["${module.WINGR1PIP.fqdns}"]
 }
 
-output "VMsPIPSubnet2publicIPAddress" {
+output "WINGR1VMspublicIPAddress" {
 
-    value = ["${module.VMsPIPSubnet2.IPAddresses}"]
+    value = ["${module.WINGR1PIP.IPAddresses}"]
 }

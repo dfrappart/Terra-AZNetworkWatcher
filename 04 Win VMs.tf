@@ -200,9 +200,9 @@ module "WINGR1VMs" {
     VMStorageTier               = "${lookup(var.Manageddiskstoragetier, 0)}"
     VMAdminName                 = "${var.VMAdminName}"
     VMAdminPassword             = "${var.VMAdminPassword}"
-    DataDiskId                  = ["${module.DataDisks_LXGR1VMs.Ids}"]
-    DataDiskName                = ["${module.DataDisks_LXGR1VMs.Names}"]
-    DataDiskSize                = ["${module.DataDisks_LXGR1VMs.Sizes}"]
+    DataDiskId                  = ["${module.DataDisks_WINGR1VMs.Ids}"]
+    DataDiskName                = ["${module.DataDisks_WINGR1VMs.Names}"]
+    DataDiskSize                = ["${module.DataDisks_WINGR1VMs.Sizes}"]
     VMPublisherName             = "${lookup(var.PublisherName, 0)}"
     VMOffer                     = "${lookup(var.Offer, 0)}"
     VMsku                       = "${lookup(var.sku, 0)}"
@@ -228,7 +228,7 @@ module "NetworkWatcherAgentForFEWeb" {
     AgentName               = "NetworkWatcherAgentForFEWeb"
     AgentLocation           = "${var.AzureRegion}"
     AgentRG                 = "${module.ResourceGroup.Name}"
-    VMName                  = ["${module.WINGR1VM.Name}"]
+    VMName                  = ["${module.WINGR1VMs.Name}"]
     EnvironmentTag          = "${var.EnvironmentTag}"
     EnvironmentUsageTag     = "${var.EnvironmentUsageTag}"
 }
