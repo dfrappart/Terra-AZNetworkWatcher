@@ -1,8 +1,9 @@
 ##############################################################
-#This file create FE Web servers
+#This file creates a group of Windows VMs, 
+#accessible from Internet Throught RDP
 ##############################################################
 
-#NSG rules for Server in Subnet 1
+#NSG rules for Server in Subnet 2
 
 module "AllowRDPromInternetSubnet2In" {
 
@@ -89,7 +90,7 @@ module "AllowAllSubnet2toInternetOut" {
 
 #Subnet2 VM PIP
 
-module "VMsPIPSubnet2" {
+module "WINGR1PIP" {
 
     #Module source
     #source = "./Modules/10 PublicIP"
@@ -98,7 +99,7 @@ module "VMsPIPSubnet2" {
 
     #Module variables
     PublicIPCount           = "1"
-    PublicIPName            = "vmpipsubnet2"
+    PublicIPName            = "wingr1pip"
     PublicIPLocation        = "${var.AzureRegion}"
     RGName                  = "${module.ResourceGroup.Name}"
     EnvironmentTag          = "${var.EnvironmentTag}"
@@ -111,7 +112,7 @@ module "VMsPIPSubnet2" {
 #Availability set creation
 
 
-module "AS_VMs_Subnet2" {
+module "AS_WINGR1VMs" {
 
     #Module source
 
@@ -119,7 +120,7 @@ module "AS_VMs_Subnet2" {
 
 
     #Module variables
-    ASName                  = "AS_VMs_Subnet2"
+    ASName                  = "AS_WINGR1VMs"
     RGName                  = "${module.ResourceGroup.Name}"
     ASLocation              = "${var.AzureRegion}"
     EnvironmentTag          = "${var.EnvironmentTag}"
@@ -130,7 +131,7 @@ module "AS_VMs_Subnet2" {
 
 #NIC Creation
 
-module "NICs_VMs_Subnet2" {
+module "NICs_WINGR1VMs" {
 
 
     #module source
@@ -141,11 +142,11 @@ module "NICs_VMs_Subnet2" {
     #Module variables
 
     NICCount            = "1"
-    NICName             = "NIC_VM"
+    NICName             = "NIC_WINGR1VM"
     NICLocation         = "${var.AzureRegion}"
     RGName              = "${module.ResourceGroup.Name}"
     SubnetId            = "${module.Subnet2.Id}"
-    PublicIPId          = ["${module.VMsPIPSubnet2.Ids}"]
+    PublicIPId          = ["${module.WINGR1PIP.Ids}"]
     EnvironmentTag      = "${var.EnvironmentTag}"
     EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 
@@ -154,7 +155,7 @@ module "NICs_VMs_Subnet2" {
 
 #Datadisk creation
 
-module "DataDisks_VMs_Subnet2" {
+module "DataDisks_LXGR1VMs" {
 
     #Module source
 
@@ -165,7 +166,7 @@ module "DataDisks_VMs_Subnet2" {
     #Module variables
 
     Manageddiskcount    = "1"
-    ManageddiskName     = "Subnet2_DataDisk_VM"
+    ManageddiskName     = "DataDisk_WINVM"
     RGName              = "${module.ResourceGroup.Name}"
     ManagedDiskLocation = "${var.AzureRegion}"
     StorageAccountType  = "${lookup(var.Manageddiskstoragetier, 0)}"
@@ -179,7 +180,7 @@ module "DataDisks_VMs_Subnet2" {
 
 #VM creation
 
-module "VMs_Subnet2" {
+module "WINGR1VMs" {
 
     #module source
 
@@ -190,18 +191,18 @@ module "VMs_Subnet2" {
     #Module variables
 
     VMCount                     = "1"
-    VMName                      = "Subnet2_VM"
+    VMName                      = "WINGR1VM"
     VMLocation                  = "${var.AzureRegion}"
     VMRG                        = "${module.ResourceGroup.Name}"
-    VMNICid                     = ["${module.NICs_VMs_Subnet2.Ids}"]
+    VMNICid                     = ["${module.NICs_WINGR1VMs.Ids}"]
     VMSize                      = "${lookup(var.VMSize, 0)}"
-    ASID                        = "${module.AS_VMs_Subnet2.Id}"
+    ASID                        = "${module.AS_WINGR1VMs.Id}"
     VMStorageTier               = "${lookup(var.Manageddiskstoragetier, 0)}"
     VMAdminName                 = "${var.VMAdminName}"
     VMAdminPassword             = "${var.VMAdminPassword}"
-    DataDiskId                  = ["${module.DataDisks_VMs_Subnet2.Ids}"]
-    DataDiskName                = ["${module.DataDisks_VMs_Subnet2.Names}"]
-    DataDiskSize                = ["${module.DataDisks_VMs_Subnet2.Sizes}"]
+    DataDiskId                  = ["${module.DataDisks_LXGR1VMs.Ids}"]
+    DataDiskName                = ["${module.DataDisks_LXGR1VMs.Names}"]
+    DataDiskSize                = ["${module.DataDisks_LXGR1VMs.Sizes}"]
     VMPublisherName             = "${lookup(var.PublisherName, 0)}"
     VMOffer                     = "${lookup(var.Offer, 0)}"
     VMsku                       = "${lookup(var.sku, 0)}"
@@ -227,7 +228,7 @@ module "NetworkWatcherAgentForFEWeb" {
     AgentName               = "NetworkWatcherAgentForFEWeb"
     AgentLocation           = "${var.AzureRegion}"
     AgentRG                 = "${module.ResourceGroup.Name}"
-    VMName                  = ["${module.VMs_Subnet2.Name}"]
+    VMName                  = ["${module.WINGR1VM.Name}"]
     EnvironmentTag          = "${var.EnvironmentTag}"
     EnvironmentUsageTag     = "${var.EnvironmentUsageTag}"
 }

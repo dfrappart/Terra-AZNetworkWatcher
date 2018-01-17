@@ -1,5 +1,6 @@
 ##############################################################
-#This file create FE Web servers
+#This file creates a group of linux VMs, 
+#accessible from Internet Throught SSH
 ##############################################################
 
 #NSG rules for Server in Subnet 1
@@ -87,9 +88,9 @@ module "AllowAllSubnet1toInternetOut" {
     NSGRuleDestinationAddressPrefix = "Internet"
 }
 
-#Subnet1 VM PIP
+#Public IP Creation for the Linux VMs group
 
-module "VMsPIPSubnet1" {
+module "LXGR1PIP" {
 
     #Module source
     #source = "./Modules/10 PublicIP"
@@ -98,7 +99,7 @@ module "VMsPIPSubnet1" {
 
     #Module variables
     PublicIPCount           = "1"
-    PublicIPName            = "vmpipsubnet1"
+    PublicIPName            = "lxgr1pip"
     PublicIPLocation        = "${var.AzureRegion}"
     RGName                  = "${module.ResourceGroup.Name}"
     EnvironmentTag          = "${var.EnvironmentTag}"
@@ -111,7 +112,7 @@ module "VMsPIPSubnet1" {
 #Availability set creation
 
 
-module "AS_VMs_Subnet1" {
+module "AS_LXGR1VMs" {
 
     #Module source
 
@@ -119,7 +120,7 @@ module "AS_VMs_Subnet1" {
 
 
     #Module variables
-    ASName                  = "AS_VMs_Subnet1"
+    ASName                  = "AS_LXGR1VMs"
     RGName                  = "${module.ResourceGroup.Name}"
     ASLocation              = "${var.AzureRegion}"
     EnvironmentTag          = "${var.EnvironmentTag}"
@@ -130,7 +131,7 @@ module "AS_VMs_Subnet1" {
 
 #NIC Creation
 
-module "NICs_VMs_Subnet1" {
+module "NICs_LXGR1VMs" {
 
 
     #module source
@@ -141,11 +142,11 @@ module "NICs_VMs_Subnet1" {
     #Module variables
 
     NICCount            = "1"
-    NICName             = "NIC_VM"
+    NICName             = "NIC_LXGR1VM"
     NICLocation         = "${var.AzureRegion}"
     RGName              = "${module.ResourceGroup.Name}"
     SubnetId            = "${module.Subnet1.Id}"
-    PublicIPId          = ["${module.VMsPIPSubnet1.Ids}"]
+    PublicIPId          = ["${module.LXGR1PIP.Ids}"]
     EnvironmentTag      = "${var.EnvironmentTag}"
     EnvironmentUsageTag = "${var.EnvironmentUsageTag}"
 
@@ -154,7 +155,7 @@ module "NICs_VMs_Subnet1" {
 
 #Datadisk creation
 
-module "DataDisks_VMs_Subnet1" {
+module "DataDisks_LXGR1VMs" {
 
     #Module source
 
@@ -165,7 +166,7 @@ module "DataDisks_VMs_Subnet1" {
     #Module variables
 
     Manageddiskcount    = "1"
-    ManageddiskName     = "Subnet1_DataDisk_VM"
+    ManageddiskName     = "DataDisk_LXVM"
     RGName              = "${module.ResourceGroup.Name}"
     ManagedDiskLocation = "${var.AzureRegion}"
     StorageAccountType  = "${lookup(var.Manageddiskstoragetier, 0)}"
@@ -179,7 +180,7 @@ module "DataDisks_VMs_Subnet1" {
 
 #VM creation
 
-module "VMs_Subnet1" {
+module "LXGR1VMs" {
 
     #module source
 
@@ -190,18 +191,18 @@ module "VMs_Subnet1" {
     #Module variables
 
     VMCount                     = "1"
-    VMName                      = "Subnet1-VM"
+    VMName                      = "LXGR1VM"
     VMLocation                  = "${var.AzureRegion}"
     VMRG                        = "${module.ResourceGroup.Name}"
-    VMNICid                     = ["${module.NICs_VMs_Subnet1.Ids}"]
+    VMNICid                     = ["${module.NICs_LXGR1VMs.Ids}"]
     VMSize                      = "${lookup(var.VMSize, 0)}"
-    ASID                        = "${module.AS_VMs_Subnet1.Id}"
+    ASID                        = "${module.AS_LXGR1VMs.Id}"
     VMStorageTier               = "${lookup(var.Manageddiskstoragetier, 0)}"
     VMAdminName                 = "${var.VMAdminName}"
     VMAdminPassword             = "${var.VMAdminPassword}"
-    DataDiskId                  = ["${module.DataDisks_VMs_Subnet1.Ids}"]
-    DataDiskName                = ["${module.DataDisks_VMs_Subnet1.Names}"]
-    DataDiskSize                = ["${module.DataDisks_VMs_Subnet1.Sizes}"]
+    DataDiskId                  = ["${module.DataDisks_LXGR1VMs.Ids}"]
+    DataDiskName                = ["${module.DataDisks_LXGR1VMs.Names}"]
+    DataDiskSize                = ["${module.DataDisks_LXGR1VMs.Sizes}"]
     VMPublisherName             = "${lookup(var.PublisherName, 4)}"
     VMOffer                     = "${lookup(var.Offer, 4)}"
     VMsku                       = "${lookup(var.sku, 4)}"
@@ -214,7 +215,7 @@ module "VMs_Subnet1" {
 }
 
 
-module "CustomScriptForVMs_Subnet1" {
+module "CustomScriptForLXGR1VMs" {
 
     #Module Location
     #source = "./Modules/19 CustomLinuxExtension-Ansible"
@@ -223,15 +224,15 @@ module "CustomScriptForVMs_Subnet1" {
 
     #Module variables
     AgentCount              = "1"
-    AgentName               = "VMs_Subnet1CustomScript"
+    AgentName               = "LXGR1VMsCustomScript"
     AgentLocation           = "${var.AzureRegion}"
     AgentRG                 = "${module.ResourceGroup.Name}"
-    VMName                  = ["${module.VMs_Subnet1.Name}"]
+    VMName                  = ["${module.LXGR1VMs.Name}"]
     EnvironmentTag          = "${var.EnvironmentTag}"
     EnvironmentUsageTag     = "${var.EnvironmentUsageTag}"
 }
 
-module "NetworkWatcherAgentForVMs_Subnet1" {
+module "NetworkWatcherAgentForLXGR1VMs" {
 
     #Module Location
     #source = "./Modules/20 LinuxNetworkWatcherAgent"
@@ -240,10 +241,10 @@ module "NetworkWatcherAgentForVMs_Subnet1" {
 
     #Module variables
     AgentCount              = "1"
-    AgentName               = "NetworkWatcherAgentForVMs_Subnet1"
+    AgentName               = "NetworkWatcherAgentForLXGR1VMs"
     AgentLocation           = "${var.AzureRegion}"
     AgentRG                 = "${module.ResourceGroup.Name}"
-    VMName                  = ["${module.VMs_Subnet1.Name}"]
+    VMName                  = ["${module.LXGR1VMs.Name}"]
     EnvironmentTag          = "${var.EnvironmentTag}"
     EnvironmentUsageTag     = "${var.EnvironmentUsageTag}"
 }
