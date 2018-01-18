@@ -216,7 +216,7 @@ module "WINGR1VMs" {
 
 #Network Watcher Agent
 
-module "NetworkWatcherAgentForFEWeb" {
+module "NetworkWatcherAgentForWINGR1VMs" {
 
     #Module Location
     #source = "./Modules/NetworkWatcherAgentWin"

@@ -1,0 +1,30 @@
+{
+    "Name": "NetworkWatcherCustomRole",
+    "Id": null,
+    "IsCustom": true,
+    "Description": "Allows for read access to Azure storage and compute resources and access to support",
+    "Actions": [
+      "Microsoft.Storage/*/read",
+      "Microsoft.Authorization/*/read",
+      "Microsoft.Resources/subscriptions/resourceGroups/*/read",
+      "Microsoft.Storage/storageAccounts/listServiceSas/*/Action",
+      "Microsoft.Storage/storageAccounts/listAccountSas/*/Action",
+      "Microsoft.Storage/storageAccounts/listKeys/*/Action",
+      "Microsoft.Compute/virtualMachines/*/read",
+      "Microsoft.Compute/virtualMachines/*/write",
+      "Microsoft.Compute/virtualMachineScaleSets/*/read",
+      "Microsoft.Compute/virtualMachineScaleSets/*/write",
+      "Microsoft.Network/networkWatchers/packetCaptures/*/read",
+      "Microsoft.Network/networkWatchers/packetCaptures/*/write",
+      "Microsoft.Network/networkWatchers/packetCaptures/*/delete",
+      "Microsoft.Network/networkWatchers/*/write",
+      "Microsoft.Network/networkWatchers/*/read",
+      "Microsoft.Insights/alertRules/*",
+      "Microsoft.Support/*"
+    ],
+    "NotActions": [
+    ],
+    "AssignableScopes": [
+      "/subscriptions/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+    ]
+  }
