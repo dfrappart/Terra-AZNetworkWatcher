@@ -1,5 +1,5 @@
 ##############################################################
-#This module allow the creation of a NEtwork Watcher
+#This module allows the creation of a NEtwork Watcher
 ##############################################################
 
 #Variable declaration for Module
