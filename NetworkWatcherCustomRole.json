@@ -2,7 +2,7 @@
     "Name": "NetworkWatcherCustomRole",
     "Id": null,
     "IsCustom": true,
-    "Description": "Allows for read access to Azure storage and compute resources and access to support",
+    "Description": "Custom Role for access to Network Watcher",
     "Actions": [
       "Microsoft.Storage/*/read",
       "Microsoft.Authorization/*/read",
