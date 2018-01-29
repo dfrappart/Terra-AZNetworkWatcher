@@ -20,7 +20,9 @@
       "Microsoft.Network/networkWatchers/*/write",
       "Microsoft.Network/networkWatchers/*/read",
       "Microsoft.Insights/alertRules/*",
-      "Microsoft.Support/*"
+      "Microsoft.Support/"*,
+      "Microsoft.Network/networkWatchers/*",
+      "Microsoft.Network/networkWatchers/*/Action"
     ],
     "NotActions": [
     ],
