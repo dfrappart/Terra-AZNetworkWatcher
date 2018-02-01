@@ -1,0 +1,21 @@
+{
+    "Name": "VMOpsCustomRole",
+    "Id": null,
+    "IsCustom": true,
+    "Description": "Custom Role for VMs Operators",
+    "Actions": [
+      "Microsoft.Compute/virtualMachines/start/action",
+      "Microsoft.Compute/virtualMachines/powerOff/action",
+      "Microsoft.Compute/virtualMachines/restart/action",
+      "Microsoft.Compute/virtualMachines/deallocate/action",
+      "Microsoft.Compute/virtualMachineScaleSets/virtualMachines/start/action",
+      "Microsoft.Compute/virtualMachineScaleSets/virtualMachines/powerOff/action",
+      "Microsoft.Compute/virtualMachineScaleSets/virtualMachines/restart/action",
+      "Microsoft.Compute/virtualMachineScaleSets/virtualMachines/deallocate/action"
+    ],
+    "NotActions": [
+    ],
+    "AssignableScopes": [
+      "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxxxxxxxxxxxxx"
+    ]
+  }
